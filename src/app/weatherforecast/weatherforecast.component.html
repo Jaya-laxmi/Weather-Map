@@ -1,0 +1,125 @@
+<div class="app-main">
+    <mat-toolbar color="primary" class="app-main__navbar">
+      <a mat-button> Weather App </a>
+    </mat-toolbar>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <form [formGroup]="SearchForm">
+      <div class="col-md">
+        <mat-form-field>
+          <mat-select formControlName="forecast" (selectionChange)="appendForeCast($event)">
+            <mat-option value="">Select ForeCast type</mat-option>
+            <mat-option *ngFor="let Fcast of foreCastDetails" [value]="Fcast">{{Fcast}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-card class="app-city-selector" *ngIf="isForecastSelected">
+          <mat-form-field class="example-full-width">
+            <input matInput type="text"
+            placeholder="City name" formControlName="seachfield" (click)="searchLocation('true')">
+          </mat-form-field>
+        </mat-card>
+        <div *ngIf="Searched">
+          <mat-card class="app-city-selector" *ngFor="let item of weatherdetails; let i=index">
+            <mat-card-header class="app-city-info__text">{{item.name}}
+            <div class="app-city-info__header">
+              <button
+                class="app-city-info__delete-button"
+                (click)="deleteCity(item)"
+                mat-icon-button color="accent">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </mat-card-header>
+              <mat-card-content *ngIf="Searched">
+                <p class="app-city-info__text">
+                    Country: {{item?.sys?.country}}
+                </p>
+                <p class="app-city-info__text">
+                    Lat: {{item?.coord?.lat}} Lon: {{item?.coord?.lon}}
+                </p>
+              </mat-card-content>
+            </mat-card>
+            
+          </div>
+        </div>
+        
+  </form>
+
+  <div class="col-md">
+    <div class="app-weather-item__title">Weather details</div>
+    <div *ngIf="weatherData" class="app-weather-item">
+        <div *ngIf="weatherData.name && weatherData.sys.country" class="app-weather-item__title">
+          Location: {{weatherData?.name}}, {{weatherData?.sys?.country}}
+        </div>
+      
+        <div *ngIf="weatherData.coord" class="app-weather-item__coordinates">
+          Longitude: {{weatherData?.coord?.lon}}, Latitude: {{weatherData?.coord?.lat}}
+        </div>
+      
+        <div *ngIf="weatherData.dt_txt" class="app-weather-item__coordinates">
+          {{weatherData?.dt_txt}}
+        </div>
+      
+        <div *ngFor="let weatherItem of weatherData.weather" class="app-weather-item__weather">
+          <div class="app-weather-item__weather-item">
+            <img [src]="'https://openweathermap.org/img/w/'+weatherItem.icon+'.png'">
+            <span class="app-weather-item__weather-item-text">
+              {{weatherItem?.main}}
+            </span>
+            <span class="app-weather-item__weather-item-text app-weather-item__weather-item-text_descr">
+              {{weatherItem?.description}}
+            </span>
+          </div>
+        </div>
+      
+        <div class="app-weather-item__info" *ngIf="weatherData.main">
+          <div>
+            Temperature: {{(weatherData?.main?.temp - 273)?.toFixed(1)}} Pressure: {{weatherData?.main?.pressure}} hpa
+          </div>
+          <div>
+            Humidity: {{weatherData?.main?.humidity}}%
+          </div>
+        </div>
+      
+        <div class="app-weather-item__wind" *ngIf="weatherData.wind">
+          <div>
+            Wind speed: {{weatherData?.wind?.speed}} m/s Wind deg: {{weatherData?.wind?.deg}}°
+          </div>
+        </div>
+       
+      </div>
+  </div>
+</div>
+</div>
+
+<!-- <form [formGroup]="SearchForm">
+  <mat-form-field>
+    <mat-select formControlName="forecast" (selectionChange)="appendForeCast($event)">
+      <mat-option value="">Select ForeCast type</mat-option>
+      <mat-option *ngFor="let Fcast of foreCastDetails" [value]="Fcast">{{Fcast}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-card class="app-city-selector">
+    <mat-form-field class="example-full-width">
+      <input matInput type="text"
+      placeholder="City name" formControlName="seachfield" (click)="searchLocation()">
+    </mat-form-field>
+
+    <mat-card-content *ngIf="weatherData">
+      <p class="app-city-info__text">
+          Country: {{weatherData?.sys?.country}}
+      </p>
+      <p class="app-city-info__text">
+          Lat: {{weatherData?.coord?.lat}} Lon: {{weatherdetails?.coord?.lon}}
+      </p>
+    </mat-card-content>
+  </mat-card>
+
+</form> -->
+
+
+  
